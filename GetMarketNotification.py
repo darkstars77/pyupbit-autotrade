@@ -15,7 +15,7 @@ myToken = json_data['myToken']
 def bull_market(ticker, k):
     """상승장 흐름 조회"""
     df = pyupbit.get_ohlcv(ticker)
-    ma5 = df['close'].rolling(window=5).mean()
+    ma5 = df['close'].rolling(window=k).mean()
     price = pyupbit.get_current_price(ticker)
     last_ma5 = ma5[-2]
 
@@ -37,6 +37,7 @@ upbit = pyupbit.Upbit(access, secret)
 # Parameter
 hour = 8
 time_period = 3600 * hour
+k = 5 #moving average day 5
 
 print("Bull Market Notification start")
 
@@ -48,7 +49,7 @@ while True:
         bull_list = []
 
         for ticker in tickers:
-            if bull_market(ticker):
+            if bull_market(ticker, k):
                 market_dict[ticker] = '상승장'
                 bull_list.append(ticker)
             else:
