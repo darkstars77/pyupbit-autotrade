@@ -2,10 +2,13 @@ import time
 import pyupbit
 import requests
 import json
+import os
+
+# 상대경로 사용하기 위해, 실행파일 프로젝트 경로 고정
+os.chdir(os.path.dirname(os.path.realpath(__file__)))
 
 with open('../pw.json') as json_file:
     json_data = json.load(json_file)
-
 
 access = json_data['access']
 secret = json_data['secret']
