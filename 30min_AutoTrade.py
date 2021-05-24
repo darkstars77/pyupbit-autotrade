@@ -78,6 +78,14 @@ post_message(myToken,"#crypto", "{} autotrade start".format(my_ticker))
 
 # 매매 컨트롤
 buy_status = False
+trading_start_msg = False
+buy_count = 0
+sell_count = 0
+
+# 하루 수익률 계산
+Init_KRW = 0
+Final_KRW = 0
+
 
 while True:
     try:
@@ -86,6 +94,12 @@ while True:
         end_time = start_time + datetime.timedelta(minutes=min_value) - datetime.timedelta(seconds=1)
 
         #print("start: {}, now: {}, end: {}".format(start_time, now, end_time))
+        if fix_time_start.time() < now.time() < fix_time_end.time() and trading_start_msg is False:
+            Init_KRW = get_balance("KRW")
+            post_message(myToken, "#crypto", "<거래 개시>\nㅇ시작시간 : {}\nㅇ잔고 : {}".format(now.time(), Init_KRW))
+            trading_start_msg = True
+            buy_count = 0
+            sell_count = 0
 
         if fix_time_start.time() < now.time() < fix_time_end.time():
             if start_time < now < end_time - datetime.timedelta(seconds=10):
@@ -97,10 +111,11 @@ while True:
                 if target_price < current_price and buy_status is False:
                     krw = get_balance("KRW")
                     if krw > 5000:
-                        buy_result = upbit.buy_market_order(my_ticker, 10000)
+                        buy_result = upbit.buy_market_order(my_ticker, 100000)
                         post_message(myToken,"#crypto", "{} buy : ".format(my_ticker) +str(buy_result))
-                        print("#crypto", "{} buy : ".format(my_ticker) +str(buy_result))
+                        #print("#crypto", "{} buy : ".format(my_ticker) +str(buy_result))
                         buy_status = True
+                        buy_count += 1
             else:
                 coin = get_balance(my_ticker.split('-')[-1]) #my_ticker의 A-B -> B 의미
                 if coin > 0 and buy_status is True:
@@ -108,10 +123,15 @@ while True:
                     post_message(myToken,"#crypto", "{} sell : ".format(my_ticker) +str(sell_result))
                     #print("#crypto", "{} sell : ".format(my_ticker) +str(sell_result))
                     buy_status = False
+                    sell_count += 1
         else:
-            post_message(myToken,"#crypto","거래시간이 아닙니다.")
-            #print("거래시간이 아닙니다.")
-            time.sleep(10)
+            if trading_start_msg is True:
+                Final_KRW = get_balance("KRW")
+                post_message(myToken, "#crypto", "<거래 종료>\nㅇ종료시간 : {}\nㅇ잔고 : {}".format(now.time(), Final_KRW))
+                post_message(myToken, "#crypto", "ㅇ매수:{}회, 매도:{}회".format(buy_count, sell_count))
+                post_message(myToken, "#crypto", "ㅇ수익률 : {}".format((Final_KRW/Init_KRW-1)*100))
+                trading_start_msg = False
+                #print("거래시간이 아닙니다.")
 
         time.sleep(1)
     except Exception as e:
