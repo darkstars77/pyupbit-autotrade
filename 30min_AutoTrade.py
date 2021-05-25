@@ -69,7 +69,7 @@ interval_value = "minute30"
 min_value = 30
 
 # trading time
-fix_time_start = datetime.datetime(1999, 9, 9, 4, 30, 0, 0)
+fix_time_start = datetime.datetime(1999, 9, 9, 1, 00, 0, 0)
 fix_time_end = datetime.datetime(1999, 9, 9, 9, 00, 0, 0)
 
 
@@ -111,7 +111,7 @@ while True:
                 if target_price < current_price and buy_status is False:
                     krw = get_balance("KRW")
                     if krw > 5000:
-                        buy_result = upbit.buy_market_order(my_ticker, 100000)
+                        buy_result = upbit.buy_market_order(my_ticker, krw*0.9995)
                         post_message(myToken,"#crypto", "{} buy : ".format(my_ticker) +str(buy_result))
                         #print("#crypto", "{} buy : ".format(my_ticker) +str(buy_result))
                         buy_status = True
