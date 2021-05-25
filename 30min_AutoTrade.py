@@ -70,7 +70,7 @@ min_value = 30
 
 # trading time
 fix_time_start = datetime.datetime(1999, 9, 9, 1, 00, 0, 0)
-fix_time_end = datetime.datetime(1999, 9, 9, 9, 00, 0, 0)
+fix_time_end = datetime.datetime(1999, 9, 9, 9, 30, 0, 0)
 
 
 # 시작 메세지 슬랙 전송
