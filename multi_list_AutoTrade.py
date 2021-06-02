@@ -60,14 +60,13 @@ upbit = pyupbit.Upbit(access, secret)
 print("autotrade start")
 
 # parameter
-my_ticker='KRW-XRP'
 # ticker_list = ['KRW-XRP', 'KRW-DOGE', 'KRW-ETH', 'KRW-ETC', 'KRW-BTC', 'KRW-ADA', 'KRW-DOT', 'KRW-LINK']
 ticker_list = ['KRW-XRP', 'KRW-ETH', 'KRW-BTC', 'KRW-ADA', 'KRW-LINK']
 ma_value=5 # moving average value
 k=0.5 #변동성 계수 통상적으로 0.5 사용
 
 # 시작 메세지 슬랙 전송
-post_message(myToken,"#crypto", "{} autotrade start".format(my_ticker))
+post_message(myToken,"#crypto", "{} autotrade start".format(ticker_list))
 
 while True:
     try:
@@ -87,7 +86,7 @@ while True:
             else:
                 btc = get_balance(my_ticker.split('-')[-1]) #my_ticker의 A-B -> B 의미
                 if btc > 0.00008:
-                    sell_result = upbit.sell_market_order(my_ticker, btc*0.9995)
+                    sell_result = upbit.sell_market_order(my_ticker, btc)
                     post_message(myToken,"#crypto", "{} sell : ".format(my_ticker) +str(sell_result))
         time.sleep(1)
     except Exception as e:
