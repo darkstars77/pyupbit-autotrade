@@ -76,8 +76,9 @@ krw = get_balance("KRW")
 
 if krw > 5000:
     #krw * 0.9995
-    buy_result = upbit.buy_market_order(my_ticker, krw * 0.1)
-    Max_Price = buy_result['price']
+    buy_result = upbit.buy_market_order(my_ticker, krw * 0.9995)
+    print(buy_result)
+    Max_Price = float(buy_result['price'])
     post_message(myToken, "#crypto", "{} buy : ".format(my_ticker) + str(buy_result['price']))
 
 while True:
@@ -86,15 +87,13 @@ while True:
         if current_price > Max_Price:
             Max_Price = current_price
 
-        target_price = Max_Price * 0.9
+        target_price = Max_Price
         if current_price < target_price:
             coin = get_balance(my_ticker.split('-')[-1])
-            sell_result = upbit.sell_market_order(my_ticker, coin)
+            print('coin : {}'.format(coin))
+            sell_result = upbit.sell_market_order(my_ticker, coin*0.9995)
             post_message(myToken, "#crypto", "{} sell : ".format(my_ticker) + str(sell_result['price']))
-
-        print('Target  Price : {}'.format(target_price))
-        print('Current Price : {}'.format(current_price))
-        print('Max     Price : {}'.format(Max_Price))
+            break
 
         time.sleep(1)
     except Exception as e:
