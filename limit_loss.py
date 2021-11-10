@@ -87,7 +87,7 @@ while True:
         if current_price > Max_Price:
             Max_Price = current_price
 
-        target_price = Max_Price
+        target_price = Max_Price * 0.9
         if current_price < target_price:
             coin = get_balance(my_ticker.split('-')[-1])
             print('coin : {}'.format(coin))
