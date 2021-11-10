@@ -78,8 +78,9 @@ if krw > 5000:
     #krw * 0.9995
     buy_result = upbit.buy_market_order(my_ticker, krw * 0.9995)
     print(buy_result)
-    Max_Price = float(buy_result['price'])
+    Max_Price = get_current_price(my_ticker)
     post_message(myToken, "#crypto", "{} buy : ".format(my_ticker) + str(buy_result['price']))
+    post_message(myToken, "#crypto", "매입시 현재가 : {} ".format(Max_Price))
 
 while True:
     try:
@@ -93,6 +94,7 @@ while True:
             print('coin : {}'.format(coin))
             sell_result = upbit.sell_market_order(my_ticker, coin*0.9995)
             post_message(myToken, "#crypto", "{} sell : ".format(my_ticker) + str(sell_result['price']))
+            post_message(myToken, "#crypto", "매도시 현재가: ".format(current_price))
             break
 
         time.sleep(1)
